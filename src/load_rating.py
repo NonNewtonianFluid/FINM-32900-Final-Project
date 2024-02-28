@@ -54,7 +54,7 @@ def get_sp_rating(df):
     # Replace the ratings in the "rating" column with numeric values
     rat["spr"] = rat["rating"].map(sp_rating_mapping)
     rat = rat.drop_duplicates(subset=['issue_id', 'rating_date'])
-    rat['category'] = rat['rating'].apply(rating_to_category)
+    rat['category'] = rat['spr'].apply(rating_to_category)
     return rat
 
 
@@ -89,21 +89,31 @@ def get_md_rating(df):
     rat["mdr"] = rat["rating"].map(sp_rating_mapping)
     rat = rat.drop_duplicates(subset=['issue_id', 'rating_date'])
     # Apply the function to the 'rating' column to create the new 'category' column
-    rat['category'] = rat['rating'].apply(rating_to_category)
+    rat['category'] = rat['mdr'].apply(rating_to_category)
     return rat
 
 
+# def rating_to_category(rating):
+#     if pd.isna(rating):
+#         return None  # or 'Unknown' if you prefer to label NaN ratings
+#     # Define the rating thresholds for each category
+#     if rating in ['AAA', 'AA+', 'AA', 'AA-', 'A+', 'A']:
+#         return 'A and above'
+#     elif rating in ['A-', 'BBB+', 'BBB']:
+#         return 'BBB'
+#     else:
+#         return 'Junk'
+    
 def rating_to_category(rating):
     if pd.isna(rating):
         return None  # or 'Unknown' if you prefer to label NaN ratings
     # Define the rating thresholds for each category
-    if rating in ['AAA', 'AA+', 'AA', 'AA-', 'A+', 'A']:
+    if 0 <= rating <= 6 :
         return 'A and above'
-    elif rating in ['A-', 'BBB+', 'BBB']:
+    elif 7 <= rating <= 9:
         return 'BBB'
     else:
         return 'Junk'
-    
 
 
 
@@ -140,6 +150,5 @@ if __name__ == "__main__":
     ratsp = get_sp_rating(rat)
     ratmd = get_md_rating(rat)
 
-    ratsp.to_csv('.'/ Path(DATA_DIR) / "pulled" / 'sp_ratings_with_CUSIP.csv', index=False)
-    ratmd.to_csv('.'/ Path(DATA_DIR) / "pulled" / 'moody_ratings_with_CUSIP.csv', index=False)
-
+    ratsp.to_csv( Path(DATA_DIR) / "pulled" / 'sp_ratings_with_CUSIP.csv', index=False)
+    ratmd.to_csv( Path(DATA_DIR) / "pulled" / 'moody_ratings_with_CUSIP.csv', index=False)
