@@ -1,7 +1,7 @@
 '''
 Overview
 -------------
-This Python script downloads the S&P and Moody's ratings and converts them
+This Python script downloads the S&P ratings and converts them
 into numerical scores, i.e., AAA == 1, C ==21.
 '''
 
@@ -57,52 +57,6 @@ def get_sp_rating(df):
     rat['category'] = rat['spr'].apply(rating_to_category)
     return rat
 
-
-# Define the mapping from Moody's ratings to numeric values
-moody_rating_mapping = {
-    "Aaa": 1,
-    "Aa1": 2,
-    "Aa2": 3,
-    "Aa3": 4,
-    "A1": 5,
-    "A2": 6,
-    "A3": 7,
-    "Baa1": 8,
-    "Baa2": 9,
-    "Baa3": 10,
-    "Ba1": 11,
-    "Ba2": 12,
-    "Ba3": 13,
-    "B1": 14,
-    "B2": 15,
-    "B3": 16,
-    "Caa1": 17,
-    "Caa2": 18,
-    "Caa3": 19,
-    "Ca": 20,
-    "C": 21,
-}
-
-def get_md_rating(df):
-    rat = df[  (df['rating_type'] == "MR") ]
-    # Replace the ratings in the "rating" column with numeric values
-    rat["mdr"] = rat["rating"].map(sp_rating_mapping)
-    rat = rat.drop_duplicates(subset=['issue_id', 'rating_date'])
-    # Apply the function to the 'rating' column to create the new 'category' column
-    rat['category'] = rat['mdr'].apply(rating_to_category)
-    return rat
-
-
-# def rating_to_category(rating):
-#     if pd.isna(rating):
-#         return None  # or 'Unknown' if you prefer to label NaN ratings
-#     # Define the rating thresholds for each category
-#     if rating in ['AAA', 'AA+', 'AA', 'AA-', 'A+', 'A']:
-#         return 'A and above'
-#     elif rating in ['A-', 'BBB+', 'BBB']:
-#         return 'BBB'
-#     else:
-#         return 'Junk'
     
 def rating_to_category(rating):
     if pd.isna(rating):
@@ -114,7 +68,6 @@ def rating_to_category(rating):
         return 'BBB'
     else:
         return 'Junk'
-
 
 
 if __name__ == "__main__":
@@ -134,9 +87,8 @@ if __name__ == "__main__":
 
     rat = pd.merge(rat_raw,id,how='inner',on='issue_id')
 
-    # Keep SP and Moody's Ratings #
-    rat = rat[ ( (rat['rating_type'] == "SPR")|\
-                (rat['rating_type'] == "MR") ) ]
+    # Keep SP Ratings
+    rat = rat[rat['rating_type'] == "SPR"]
 
     # Remove from sample, ALL bonds with an "NR" (not rated) and the "NR",
     # derivatives category #
@@ -148,7 +100,5 @@ if __name__ == "__main__":
     rat = rat[rat['rating'] != 'NAV']
 
     ratsp = get_sp_rating(rat)
-    ratmd = get_md_rating(rat)
 
     ratsp.to_csv( Path(DATA_DIR) / "pulled" / 'sp_ratings_with_CUSIP.csv', index=False)
-    ratmd.to_csv( Path(DATA_DIR) / "pulled" / 'moody_ratings_with_CUSIP.csv', index=False)
