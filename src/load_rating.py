@@ -49,6 +49,8 @@ sp_rating_mapping = {
     "D":22
 }
 
+# Filters the DataFrame to retain rows where `rating_type` is "SPR", converts ratings to numeric values, 
+# removes duplicates, and assigns categories based on numeric ratings.
 def get_sp_rating(df):
     rat = df[  (df['rating_type'] == "SPR") ]
     # Replace the ratings in the "rating" column with numeric values
@@ -57,10 +59,11 @@ def get_sp_rating(df):
     rat['category'] = rat['spr'].apply(rating_to_category)
     return rat
 
-    
+# Converts numeric ratings into categories ('A and above', 'BBB', or 'Junk') based on predefined thresholds, 
+# handling NaN values as None.
 def rating_to_category(rating):
     if pd.isna(rating):
-        return None  # or 'Unknown' if you prefer to label NaN ratings
+        return None 
     # Define the rating thresholds for each category
     if 0 <= rating <= 6 :
         return 'A and above'
