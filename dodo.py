@@ -45,6 +45,45 @@ def task_pull_trace():
         "clean": True,
     }
 
+def task_pull_rating():
+    '''
+    Pull the ratings data from WRDS
+    '''
+    file_dep = ["./src/load_mergeCusip_rating.py"]
+    file_output = ["rating.csv"]
+    targets = [DATA_DIR / "pulled" / file for file in file_output]
+
+    return {
+        "actions": [
+            "ipython ./src/load_mergeCusip_rating.py",
+        ],
+        "targets": targets,
+        "file_dep": file_dep,
+        "clean": True,
+    }
+
+def task_calc_spread_bias():
+    '''
+    Calculate spread and bias
+    '''
+    file_input = ['Illiq.csv.gzip', 'rating.csv']
+    file_dep = ["./src/calc_spreadBias.py"] + [DATA_DIR / "pulled" / file for file in file_input]
+    
+    file_output = ["Illiqs_with_spread_bias.csv"]
+    targets = [DATA_DIR / "pulled" / file for file in file_output]
+
+    task_dep = ["pull_trace","pull_rating"]
+
+    return {
+        "actions": [
+            "ipython ./src/calc_Spreadbias.py",
+        ],
+        "targets": targets,
+        "task_dep": task_dep,
+        "file_dep": file_dep,
+        "clean": True,
+    }
+
 
 # # def task_pull_data_via_presto():
 # #     """
