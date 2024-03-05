@@ -121,9 +121,14 @@ if __name__ == "__main__":
 
     df_wo5 = df[df['trade_counts'] >= 5]
 
-    df_final = df_wo5[df_wo5['n'] <= 7]
+    df_wo5 = df_wo5[df_wo5['n'] <= 7]
+
+    df_final = calc_spread_bias(df_wo5)
+
+    df_final['date'] = pd.to_datetime(df_final['date'])
+    df_final.sort_vaues(['cusip_id', 'date'], inplace = True)
 
     df_final.to_csv( Path(DATA_DIR) / "pulled" / 'Illiqs_with_spread_bias.csv', index=False)
-
+    
 
 
