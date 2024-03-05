@@ -1,8 +1,10 @@
 '''
 Overview
 -------------
-This Python script downloads the S&P ratings and converts them
-into numerical scores, i.e., AAA == 1, C ==21.
+This Python script
+1. downloads the ratings from WRDS,
+2. cleans them by only keeping the Moody's and SP's rating
+3. converts them into numerical scores
 '''
 
 import pandas as pd
@@ -49,19 +51,38 @@ sp_rating_mapping = {
     "D":22
 }
 
-# Filters the DataFrame to retain rows where `rating_type` is "SPR", converts ratings to numeric values, 
-# removes duplicates, and assigns categories based on numeric ratings.
-def get_sp_rating(df):
-    rat = df[  (df['rating_type'] == "SPR") ]
-    # Replace the ratings in the "rating" column with numeric values
-    rat["spr"] = rat["rating"].map(sp_rating_mapping)
-    rat = rat.drop_duplicates(subset=['issue_id', 'rating_date'])
-    rat['category'] = rat['spr'].apply(rating_to_category)
-    return rat
+# Define the mapping from Moody ratings to numeric values
+moody_rating_mapping = {
+    "Aaa": 1,
+    "Aa1": 2,
+    "Aa2": 3,
+    "Aa3": 4,
+    "A1": 5,
+    "A2": 6,
+    "A3": 7,
+    "Baa1": 8,
+    "Baa2": 9,
+    "Baa3": 10,
+    "Ba1": 11,
+    "Ba2": 12,
+    "Ba3": 13,
+    "B1": 14,
+    "B2": 15,
+    "B3": 16,
+    "Caa1": 17,
+    "Caa2": 18,
+    "Caa3": 19,
+    "Ca": 20,
+    "C": 21,
+}
 
-# Converts numeric ratings into categories ('A and above', 'BBB', or 'Junk') based on predefined thresholds, 
-# handling NaN values as None.
+
+
 def rating_to_category(rating):
+    '''
+    This function converts numeric ratings into categories ('A and above', 'BBB', or 'Junk') 
+    based on predefined thresholds, and handling NaN values as None.
+    '''
     if pd.isna(rating):
         return None 
     # Define the rating thresholds for each category
@@ -71,6 +92,46 @@ def rating_to_category(rating):
         return 'BBB'
     else:
         return 'Junk'
+    
+
+def get_sp_rating(df):
+    '''
+    This function Filters the DataFrame to retain rows where `rating_type` is "SPR", 
+    converts ratings to numeric values, removes duplicates, 
+    and assigns categories based on numeric ratings.
+    '''
+    rat = df[(df['rating_type'] == "SPR")]
+    # Replace the ratings in the "rating" column with numeric values
+    rat["spr"] = rat["rating"].map(sp_rating_mapping)
+    rat = rat.drop_duplicates(subset=['issue_id', 'rating_date'])
+    rat['category'] = rat['spr'].apply(rating_to_category)
+    return rat
+
+
+def get_moody_rating(df):
+    '''
+    This function filters the DataFrame to retain rows where `rating_type` is "MR",
+    converts ratings to numeric values, removes duplicates, 
+    and assigns categories based on numeric ratings.
+    '''
+    rat = df[(df['rating_type'] == "MR") ]
+    # Replace the ratings in the "rating" column with numeric values
+    rat["mr"] = rat["rating"].map(moody_rating_mapping)
+    rat = rat.drop_duplicates(subset=['issue_id', 'rating_date'])
+    rat['category'] = rat['mr'].apply(rating_to_category)
+    return rat
+
+
+def concat_moody_sp(ratsp, ratsmd):
+    '''
+    This function concat the moody and sp ratings together, 
+    and inplace the sp ratings with moody ratings if the rating is missing
+    '''
+    df = pd.concat([ratsp, ratsmd], axis=0)
+    df = df.sort_values(by=['complete_cusip', 'rating_date'])
+    df['spr'] = df['spr'].fillna(df['mr'])
+    df = df.drop_duplicates(subset=['issue_id', 'rating_date'])
+    return df
 
 
 if __name__ == "__main__":
@@ -90,18 +151,21 @@ if __name__ == "__main__":
 
     rat = pd.merge(rat_raw,id,how='inner',on='issue_id')
 
-    # Keep SP Ratings
-    rat = rat[rat['rating_type'] == "SPR"]
+    rat1 = rat[rat['rating_type'] == "SPR"]
+    rat2 = rat[rat['rating_type'] == "MR"]
+
+    ratsp = get_sp_rating(rat1)
+    ratsmd = get_moody_rating(rat2)
+    
+    rating = concat_moody_sp(ratsp, ratsmd)
 
     # Remove from sample, ALL bonds with an "NR" (not rated) and the "NR",
     # derivatives category #
-    rat = rat[rat['rating'] != "NR"]
-    rat = rat[rat['rating'] != 'NR/NR']
-    rat = rat[rat['rating'] != 'SUSP']
-    rat = rat[rat['rating'] != 'P-1']
-    rat = rat[rat['rating'] != '0']
-    rat = rat[rat['rating'] != 'NAV']
-
-    ratsp = get_sp_rating(rat)
-
-    ratsp.to_csv( Path(DATA_DIR) / "pulled" / 'sp_ratings_with_CUSIP.csv', index=False)
+    rating = rating[rating['rating'] != "NR"]
+    rating = rating[rating['rating'] != 'NR/NR']
+    rating = rating[rating['rating'] != 'SUSP']
+    rating = rating[rating['rating'] != 'P-1']
+    rating = rating[rating['rating'] != '0']
+    rating = rating[rating['rating'] != 'NAV']
+    
+    rating.to_csv( Path(DATA_DIR) / "pulled" / 'rating.csv', index=False)
