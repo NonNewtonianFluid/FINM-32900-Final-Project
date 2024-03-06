@@ -84,6 +84,39 @@ def task_calc_spread_bias():
         "clean": True,
     }
 
+def task_pull_return_cs():
+    '''
+    pull daily return and credit spread data from Open Bond Asset Pricing website.
+    '''
+    # TO DO
+    pass
+
+
+def task_calc_daily_return_cs():
+    '''
+    calculate daily return and credit spread, with filtering conditions
+    '''
+    file_input = ['BondDailyPublic.csv.gzip']
+    file_dep = ["./src/calc_daily_return_cs.py"] + [DATA_DIR / "pulled" / file for file in file_input]
+    
+    file_output = ["daily_return_cs.csv"]
+    targets = [DATA_DIR / "pulled" / file for file in file_output]
+
+    task_dep = ["pull_return_cs"]
+
+    return {
+        "actions": [
+            "ipython ./src/calc_daily_return_cs.py",
+        ],
+        "targets": targets,
+        "task_dep": task_dep,
+        "file_dep": file_dep,
+        "clean": True,
+    }
+
+
+
+
 
 # # def task_pull_data_via_presto():
 # #     """
