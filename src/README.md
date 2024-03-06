@@ -19,8 +19,14 @@ Please make sure to update and install the required packages.
 
 Run these scripts sequentially to produce table 1 from the paper.
 
-1. Run ```calculate_bond_return.py```. This script uses the data downloaded from the file ```MakeBondDailyMetrics.py.py``` Open Source Bond Asset Pricing outputs the daily corporate bond prices filtering based on business days between trades (<= 5 days), filtering out bonds with less than five trades per month, calculating the daily returns, removing large return reversals and excluding returns with absolute value > 20%.
+1.  load_trace
+2.  load_rating
+3.  load_return_cs (Carol)
+4.  calc_spread_bias.py
+5.  calc_daily_return_cs.py
+6.  merge_metrics.py(output daily.csv, ultimate_table)
+7.  summary_stats.ipynb
+8.  pandas_to_latex.py
 
-2. Run ```bond_return_with_rating.py```. This script use the data generated from ```calculate_bond_return.py``` and outputs the mean daily bond return based on different time period subsamples, conditioning on different ratings. 
 
    
