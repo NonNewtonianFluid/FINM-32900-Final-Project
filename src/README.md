@@ -19,9 +19,9 @@ Please make sure to update and install the required packages.
 
 Run these scripts sequentially to produce table 1 from the paper.
 
-1.  load_trace
-2.  load_rating
-3.  load_return_cs (Carol)
+1.  load_trace.py
+2.  load_rating.py
+3.  load_return_cs.py (Carol)
 4.  calc_spread_bias.py
 5.  calc_daily_return_cs.py
 6.  merge_metrics.py(output daily.csv, ultimate_table)
