@@ -133,7 +133,7 @@ if __name__ == "__main__":
     
     df_final = calc_daily_returns_remove_large_reversals(df_less_five_trade)
     
-    df_final.to_csv( Path(DATA_DIR) / "pulled" / 'daily_return.csv', index=False)
+    df_final.to_csv( Path(DATA_DIR) / "pulled" / 'daily_return_cs.csv', index=False)
     
 
     
