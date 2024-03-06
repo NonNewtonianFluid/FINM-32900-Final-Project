@@ -37,38 +37,6 @@ def process_illiquid_data(df):
     return df
 
 
-def process_rating_data(df):
-    '''
-    This function process the raw rating data retreived through load_rating.py
-    1. rename the trading date and bond id column for merging
-    2. sort the data in the order of bond id and date
-    '''
-    df = df[['complete_cusip','rating_date', 'rating','category']].sort_values(by=['complete_cusip','rating_date']).reset_index(drop=True)
-    df = df.rename(columns = {'complete_cusip':'cusip_id', 'rating_date':'date'})
-    return df
-
-
-def merge_rating_illiquid(illiqs, rating):
-    '''
-    This function merges the illiquid data and rating data in the aim of functioning as the merge_asof function.
-    It matches the illiquid data with the rating for each bond by forward-filling mis-matched rating date and trading date,  for each cusip_id group, 
-    and only includes rows originally from illiquid data.
-    '''
-    illiqs['source'] = 'A'
-    rating['source'] = 'R'
-
-    df = pd.concat([illiqs,rating],axis=0)
-    df = df.sort_values(by=['cusip_id','date','source'])
-
-    df_filled = df.groupby('cusip_id').apply(lambda group: group.ffill())
-    df_filled = df_filled.reset_index(drop=True)
-    df_filled = df_filled[df_filled['source']=='A']
-    df_filled = df_filled[df_filled['category'].notna()]
-    df_filled = df_filled.reset_index(drop=True)
-
-    return df_filled
-
-
 def get_trades_info(df, start_date = START_DATE, end_date = END_DATE):
     '''
     This function is used to process the illiquid data by adding 2 columns 
@@ -111,13 +79,10 @@ def calc_spread_bias(df):
 if __name__ == "__main__":
     
     raw_illiqs = pd.read_csv('..' / DATA_DIR / "pulled" /'Illiq.csv.gzip', compression='gzip')
-    raw_rating = pd.read_csv('..' / DATA_DIR / "pulled" /'rating.csv')
 
     illiqs = process_illiquid_data(raw_illiqs)
-    rating = process_rating_data(raw_rating)
 
-    df = merge_rating_illiquid(illiqs, rating)
-    df = get_trades_info(df)
+    df = get_trades_info(illiqs)
 
     df_wo5 = df[df['trade_counts'] >= 5]
 
@@ -126,9 +91,11 @@ if __name__ == "__main__":
     df_final = calc_spread_bias(df_wo5)
 
     df_final['date'] = pd.to_datetime(df_final['date'])
-    df_final.sort_vaues(['cusip_id', 'date'], inplace = True)
+    df_final.sort_values(['cusip_id', 'date'], inplace = True)
+    df_res = df_final[['cusip_id', 'date', 'spread','winsorized_bias']]
 
-    df_final.to_csv( Path(DATA_DIR) / "pulled" / 'Illiqs_with_spread_bias.csv', index=False)
+    # df_final.to_csv( Path(DATA_DIR) / "pulled" / 'Illiqs_with_spread_bias.csv', index=False)
+    df_res.to_csv( Path(DATA_DIR) / "pulled" / 'spread_bias.csv', index=False)
     
 
 
