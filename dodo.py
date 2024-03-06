@@ -49,13 +49,13 @@ def task_pull_rating():
     '''
     Pull the ratings data from WRDS
     '''
-    file_dep = ["./src/load_mergeCusip_rating.py"]
+    file_dep = ["./src/load_rating.py"]
     file_output = ["rating.csv"]
     targets = [DATA_DIR / "pulled" / file for file in file_output]
 
     return {
         "actions": [
-            "ipython ./src/load_mergeCusip_rating.py",
+            "ipython ./src/load_rating.py",
         ],
         "targets": targets,
         "file_dep": file_dep,
@@ -69,14 +69,14 @@ def task_calc_spread_bias():
     file_input = ['Illiq.csv.gzip', 'rating.csv']
     file_dep = ["./src/calc_spreadBias.py"] + [DATA_DIR / "pulled" / file for file in file_input]
     
-    file_output = ["Illiqs_with_spread_bias.csv"]
+    file_output = ["spread_bias.csv"]
     targets = [DATA_DIR / "pulled" / file for file in file_output]
 
     task_dep = ["pull_trace","pull_rating"]
 
     return {
         "actions": [
-            "ipython ./src/calc_Spreadbias.py",
+            "ipython ./src/calc_spreadBias.py",
         ],
         "targets": targets,
         "task_dep": task_dep,
@@ -122,24 +122,22 @@ def task_calc_spread_bias():
 # #     }
 
 
-# def task_summary_stats():
-#     """ """
-#     file_dep = ["./src/example_table.py"]
-#     file_output = [
-#         "example_table.tex",
-#         "pandas_to_latex_simple_table1.tex",
-#         ]
-#     targets = [OUTPUT_DIR / file for file in file_output]
+def task_summary_stats():
+    """ """
+    file_input = ['spread_bias.csv', 'daily_return_cs.csv','rating.csv']
+    file_dep = ["./src/derive_table.py"] + [DATA_DIR / "pulled" / file for file in file_input]
 
-#     return {
-#         "actions": [
-#             "ipython ./src/example_table.py",
-#             "ipython ./src/pandas_to_latex_demo.py",
-#         ],
-#         "targets": targets,
-#         "file_dep": file_dep,
-#         "clean": True,
-#     }
+    file_output = ["derive_table.tex"]
+    targets = [OUTPUT_DIR / file for file in file_output]
+
+    return {
+        "actions": [
+            "ipython ./src/derive_table.py",
+        ],
+        "targets": targets,
+        "file_dep": file_dep,
+        "clean": True,
+    }
 
 
 # def task_example_plot():
@@ -255,29 +253,24 @@ def task_calc_spread_bias():
 # #     }
 
 
-# def task_compile_latex_docs():
-#     """Example plots"""
-#     file_dep = [
-#         "./reports/report_example.tex",
-#         "./reports/slides_example.tex",
-#         "./src/example_plot.py",
-#         "./src/example_table.py",
-#     ]
-#     file_output = [
-#         "./reports/report_example.pdf",
-#         "./reports/slides_example.pdf",
-#     ]
-#     targets = [file for file in file_output]
+def task_compile_latex_docs():
+    """Example plots"""
+    file_dep = [
+        "./reports/report_example.tex",
+        # "./src/example_plot.py",
+        # "./src/example_table.py",
+    ]
+    file_output = [
+        "./reports/report_example.pdf",
+    ]
+    targets = [file for file in file_output]
 
-#     return {
-#         "actions": [
-#             "latexmk -xelatex -cd ./reports/report_example.tex",  # Compile
-#             "latexmk -xelatex -c -cd ./reports/report_example.tex",  # Clean
-#             "latexmk -xelatex -cd ./reports/slides_example.tex",  # Compile
-#             "latexmk -xelatex -c -cd ./reports/slides_example.tex",  # Clean
-#             # "latexmk -CA -cd ../reports/",
-#         ],
-#         "targets": targets,
-#         "file_dep": file_dep,
-#         "clean": True,
-#     }
+    return {
+        "actions": [
+            "latexmk -xelatex -cd ./reports/report_example.tex",  # Compile
+            "latexmk -xelatex -c -cd ./reports/report_example.tex",  # Clean
+        ],
+        "targets": targets,
+        "file_dep": file_dep,
+        "clean": True,
+    }
