@@ -168,7 +168,7 @@ if __name__ == "__main__":
     rating = rating[rating['rating'] != '0']
     rating = rating[rating['rating'] != 'NAV']
     
-    rating['rating_date'] = pd.to_datetime('rating_date')
+    # rating['rating_date'] = pd.to_datetime('rating_date', format='%Y-%m-%d')
     rating.sort_values(['complete_cusip', 'rating_date'], inplace=True)
     
     rating.to_csv( Path(DATA_DIR) / "pulled" / 'rating.csv', index=False)
