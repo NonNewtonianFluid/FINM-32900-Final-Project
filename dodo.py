@@ -140,18 +140,17 @@ def task_calc_daily_return_cs():
     file_output = ["daily_return_cs.csv"]
     targets = [DATA_DIR / "pulled" / file for file in file_output]
 
-    task_dep = ["pull_return_cs"]
+    # task_dep = ["pull_return_cs"]
 
     return {
         "actions": [
             "ipython ./src/calc_daily_return_cs.py",
         ],
         "targets": targets,
-        "task_dep": task_dep,
+        # "task_dep": task_dep,
         "file_dep": file_dep,
         "clean": True,
     }
-
 
 
 def task_summary_stats():
@@ -159,7 +158,7 @@ def task_summary_stats():
     file_input = ['spread_bias.csv', 'daily_return_cs.csv','rating.csv']
     file_dep = ["./src/derive_table.py"] + [DATA_DIR / "pulled" / file for file in file_input]
 
-    file_output = ["derive_table.tex"]
+    file_output = ["daily.csv","derive_table.tex"]
     targets = [OUTPUT_DIR / file for file in file_output]
 
     return {
@@ -244,24 +243,23 @@ def task_run_notebooks():
 
 
 
-def task_compile_latex_docs():
-    """Example plots"""
-    file_dep = [
-        "./reports/report_example.tex",
-        # "./src/example_plot.py",
-        # "./src/example_table.py",
-    ]
-    file_output = [
-        "./reports/report_example.pdf",
-    ]
-    targets = [file for file in file_output]
+# def task_compile_latex_docs():
+#     """Example plots"""
+#     file_dep = [
+#         "./reports/main.tex",
+#         # "./src/example_plot.py",
+#         # "./src/example_table.py",
+#     ]
+#     file_output = [
+#         "./reports/report.pdf",]
+#     targets = [file for file in file_output]
 
-    return {
-        "actions": [
-            "latexmk -xelatex -cd ./reports/report_example.tex",  # Compile
-            "latexmk -xelatex -c -cd ./reports/report_example.tex",  # Clean
-        ],
-        "targets": targets,
-        "file_dep": file_dep,
-        "clean": True,
-    }
+#     return {
+#         "actions": [
+#             "latexmk -xelatex -cd ./reports/main.tex",  # Compile
+#             "latexmk -xelatex -c -cd ./reports/main.tex",  # Clean
+#         ],
+#         "targets": targets,
+#         "file_dep": file_dep,
+#         "clean": True,
+#     }
