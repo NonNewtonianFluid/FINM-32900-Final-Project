@@ -1,0 +1,43 @@
+\small % This will apply the small font size to the table
+\begin{tabular}{l@{\hspace{30pt}} l@{\hspace{60pt}} r@{\hspace{30pt}} r@{\hspace{10pt}} r@{\hspace{10pt}} r}
+\toprule
+ &  & All & A and above & BBB & Junk \\
+category & variables &  &  &  &  \\
+\midrule
+\multirow[t]{4}{*}{Full sample} & spread & 28.767 & 25.584 & 24.529 & 36.097 \\
+ & winsorized\_bias & 0.104 & 0.088 & 0.080 & 0.143 \\
+ & daily\_return\_bps & 1.093 & 0.151 & 0.574 & 2.460 \\
+ & cs\_dur\_bps & 299.549 & 114.333 & 169.053 & 599.449 \\
+\cline{1-6}
+\multirow[t]{4}{*}{Pre-crisis} & spread & 50.237 & 38.653 & 53.043 & 62.748 \\
+ & winsorized\_bias & 0.253 & 0.173 & 0.272 & 0.339 \\
+ & daily\_return\_bps & 1.847 & -0.413 & -0.682 & 6.386 \\
+ & cs\_dur\_bps & 331.988 & 96.097 & 202.283 & 714.090 \\
+\cline{1-6}
+\multirow[t]{4}{*}{Crisis} & spread & 59.388 & 53.730 & 60.430 & 67.507 \\
+ & winsorized\_bias & 0.304 & 0.242 & 0.325 & 0.387 \\
+ & daily\_return\_bps & -1.731 & -0.439 & 5.751 & -9.251 \\
+ & cs\_dur\_bps & 660.251 & 286.105 & 558.881 & 1322.028 \\
+\cline{1-6}
+\multirow[t]{4}{*}{Post-Crisis} & spread & 39.384 & 32.847 & 39.809 & 44.822 \\
+ & winsorized\_bias & 0.149 & 0.105 & 0.148 & 0.188 \\
+ & daily\_return\_bps & 6.944 & 3.742 & 5.467 & 11.007 \\
+ & cs\_dur\_bps & 442.492 & 161.060 & 249.777 & 851.743 \\
+\cline{1-6}
+\multirow[t]{4}{*}{Basel II.5 \& III} & spread & 27.007 & 20.208 & 25.189 & 33.745 \\
+ & winsorized\_bias & 0.068 & 0.044 & 0.058 & 0.095 \\
+ & daily\_return\_bps & 1.645 & 0.200 & 1.342 & 2.988 \\
+ & cs\_dur\_bps & 288.978 & 102.203 & 176.537 & 541.398 \\
+\cline{1-6}
+\multirow[t]{4}{*}{Post-Volcker} & spread & 18.235 & 12.791 & 16.220 & 24.695 \\
+ & winsorized\_bias & 0.043 & 0.023 & 0.033 & 0.068 \\
+ & daily\_return\_bps & -0.397 & -0.765 & -0.499 & -0.005 \\
+ & cs\_dur\_bps & 222.882 & 75.045 & 130.228 & 447.545 \\
+\cline{1-6}
+\multirow[t]{4}{*}{Up to latest} & spread & 28.420 & 25.285 & 24.175 & 35.788 \\
+ & winsorized\_bias & 0.102 & 0.087 & 0.078 & 0.141 \\
+ & daily\_return\_bps & 1.155 & 0.208 & 0.683 & 2.484 \\
+ & cs\_dur\_bps & 296.450 & 113.624 & 167.989 & 594.531 \\
+\cline{1-6}
+\bottomrule
+\end{tabular}
