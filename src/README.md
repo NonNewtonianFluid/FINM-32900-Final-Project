@@ -31,9 +31,6 @@ Run these scripts sequentially to produce table 1 from the paper.
 
 6. `derive_table.py`: This Python script performs advanced processing on bond market data, integrating various sources including trading data, bid-ask spread, returns, and bond ratings. The goal is to prepare a comprehensive dataset for in-depth analysis, specifically focusing on calculating daily returns, credit spreads, and correlating these with bond ratings. The final output includes a LaTeX table summarizing key statistics across different market periods.
 
-7. `summary_stats.ipynb`:
-
-8. 'pandas_to_latex.py'
 
 
    
