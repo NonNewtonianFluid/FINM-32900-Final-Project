@@ -8,6 +8,7 @@ sys.path.insert(1, './src/')
 import config
 from pathlib import Path
 from doit.tools import run_once
+import platform
 
 
 OUTPUT_DIR = Path(config.OUTPUT_DIR)
@@ -28,6 +29,33 @@ def jupyter_to_python(notebook, build_dir):
 def jupyter_clear_output(notebook):
     return f"jupyter nbconvert --ClearOutputPreprocessor.enabled=True --ClearMetadataPreprocessor.enabled=True --inplace ./src/{notebook}.ipynb"
 # fmt: on
+
+def get_os():
+    os_name = platform.system()
+    if os_name == "Windows":
+        return "windows"
+    elif os_name == "Darwin":
+        return "nix"
+    elif os_name == "Linux":
+        return "nix"
+    else:
+        return "unknown"
+
+
+os_type = get_os()
+
+
+def copy_notebook_to_folder(notebook_stem, origin_folder, destination_folder):
+    origin_path = Path(origin_folder) / f"{notebook_stem}.ipynb"
+    destination_folder = Path(destination_folder)
+    destination_folder.mkdir(parents=True, exist_ok=True)
+    destination_path = destination_folder / f"_{notebook_stem}.ipynb"
+    if os_type == "nix":
+        command = f"cp {origin_path} {destination_path}"
+    else:
+        command = f"copy  {origin_path} {destination_path}"
+    return command
+
 
 
 def task_pull_trace():
