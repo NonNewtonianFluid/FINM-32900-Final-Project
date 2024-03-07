@@ -184,6 +184,8 @@ def task_run_notebooks():
         "03_summary_stats.ipynb"
     ]
     stems = [notebook.split(".")[0] for notebook in notebooks]
+    fig_names = ["spread_categorized", "winsorized_bias_categorized", "daily_return_bps_categorized",
+                 "cs_dur_bps_categorized", "rating", "rating_cleaned"]
 
     file_dep = [
         # 'load_other_data.py',
@@ -193,6 +195,7 @@ def task_run_notebooks():
     targets = [
         ## 03_summary_stats.ipynb output
         OUTPUT_DIR / "summary_stats.tex",
+        *[OUTPUT_DIR / f"{fig_name}.png" for fig_name in fig_names],
         ## Notebooks converted to HTML
         *[OUTPUT_DIR / f"{stem}.html" for stem in stems],
     ]
