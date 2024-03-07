@@ -180,7 +180,8 @@ def task_run_notebooks():
     Execute notebooks with summary stats and plots and remove metadata.
     """
     notebooks = [
-        "01_example_notebook.ipynb",
+        "01_intraday_daily.ipynb",
+        "03_summary_stats.ipynb"
     ]
     stems = [notebook.split(".")[0] for notebook in notebooks]
 
