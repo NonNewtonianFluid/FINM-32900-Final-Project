@@ -9,7 +9,9 @@
 \usepackage{setspace}
 \usepackage{multirow} 
 
-
+\newcommand*{\MyHeaderPath}{.}% This path definition is also passed to inside the header files.
+\newcommand*{\PathToAssets}{../assets}%
+\newcommand*{\PathToOutput}{../output}%
 
 
 \title{\textbf{FINM 32900 Final Project: Replicating Tables from \emph{Noisy Prices and Return-based Anomalies
@@ -149,7 +151,7 @@ To conclude, we organized the data by CUSIP (a unique identifier for financial i
 \subsection{Summary Statistics}
 \begin{table}[ht]
 \centering
-\input{summary_stats.tex}
+\input{\PathToOutput/summary_stats.tex}
 \caption{Summary Statistics}
 \label{tab:summary_stats}
 \end{table}
@@ -159,12 +161,17 @@ The provided table outlines a set of summary statistics for bond market data, en
 
 Examining the distribution, the minimum spread recorded is negative, at -13.38 bps, while the maximum reaches 272.16 bps, indicating a broad spread range. The daily return has a notably wide range, plunging to a minimum of -410.48 bps and soaring to a maximum of 1250 bps, highlighting the potential for extreme negative and positive returns in the dataset. The percentile values for both spread and cs\_dur\_bps suggest a progressive widening from the lower to the upper quartiles. The maximum value for cs\_dur\_bps is particularly high at 6053.54, which, alongside the high maximum for daily returns, may signal the presence of outliers or a skewed distribution with a long tail to the right.
 
+% \centering
+% \includegraphics[width=0.75\textwidth]{\PathToOutput/rating_cleaned.png}
 
+% \centering
+% \includegraphics[width=0.75\textwidth]{\PathToOutput/winsorized_bias_categorized.png}
+% \caption{\label{fig:myplot}winsorized_bias_categorized}
 
 \section{Results}
 \begin{table}[ht]
 \centering
-\input{derived_table.tex}
+\input{\PathToOutput/derived_table.tex}
 \caption{Replication of Table 1 from the Paper}
 \label{tab:derived_table}
 \end{table}
