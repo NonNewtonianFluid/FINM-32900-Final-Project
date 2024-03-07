@@ -78,7 +78,7 @@ def calc_spread_bias(df):
 
 if __name__ == "__main__":
     
-    raw_illiqs = pd.read_csv('..' / DATA_DIR / "pulled" /'Illiq.csv.gzip', compression='gzip')
+    raw_illiqs = pd.read_csv(DATA_DIR / "pulled" /'Illiq.csv.gzip', compression='gzip')
 
     illiqs = process_illiquid_data(raw_illiqs)
 

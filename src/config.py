@@ -27,7 +27,7 @@ DATA_DIR = config('DATA_DIR', default=(BASE_DIR / 'data'), cast=Path)
 OUTPUT_DIR = config('OUTPUT_DIR', default=(BASE_DIR / 'output'), cast=Path)
 WRDS_USERNAME = config("WRDS_USERNAME", default="")
 START_DATE = config("START_DATE", default="2022-07-01", cast=pd.to_datetime)
-END_DATE = config("END_DATE", default="2023-06-30", cast=pd.to_datetime)
+END_DATE = config("END_DATE", default="2024-02-29", cast=pd.to_datetime)
 
 if __name__ == "__main__":
     
