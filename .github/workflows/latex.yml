@@ -1,0 +1,37 @@
+name: Build LaTeX document
+
+on:
+  push:
+    branches:
+      - main  # This specifies that the action should be run on pushes to the main branch
+    paths:
+      - 'report/**.tex'  # This pattern matches files in the report directory with .tex extension
+      - 'report/**.bib'  # This pattern matches files in the report directory with .bib extension
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Set up TeX Live
+        uses: xucheng/texlive-action@master
+        with:
+          packages: latexmk  # latexmk is a Perl script for automating LaTeX document compilation
+
+      - name: Compile LaTeX document
+        run: |
+          cd report
+          latexmk -pdf -file-line-error -halt-on-error -interaction=nonstopmode main.tex
+          latexmk -c  # Clean up (optional)
+
+      - name: Move PDF to the report folder
+        run: mv report/main.pdf report/FINM_32900_Final_Project_Report.pdf
+
+      - name: Upload PDF to Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: report-pdf
+          path: report/FINM_32900_Final_Project_Report.pdf
