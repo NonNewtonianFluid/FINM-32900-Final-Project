@@ -78,7 +78,7 @@ def calc_spread_bias(df):
 
 if __name__ == "__main__":
     
-    raw_illiqs = pd.read_csv(DATA_DIR / "pulled" /'Illiq.csv.gzip', compression='gzip')
+    raw_illiqs = pd.read_csv( DATA_DIR / "pulled" /'Illiq.csv.gzip', compression='gzip')
 
     illiqs = process_illiquid_data(raw_illiqs)
 
@@ -94,7 +94,6 @@ if __name__ == "__main__":
     df_final.sort_values(['cusip_id', 'date'], inplace = True)
     df_res = df_final[['cusip_id', 'date', 'spread','winsorized_bias']]
 
-    # df_final.to_csv( Path(DATA_DIR) / "pulled" / 'Illiqs_with_spread_bias.csv', index=False)
     df_res.to_csv( Path(DATA_DIR) / "pulled" / 'spread_bias.csv', index=False)
     
 
