@@ -67,8 +67,13 @@ def merge_rating(data, rating):
 
 
 def derive_table(res_df):
-    df = all_df.copy()
+    df = res_df.copy()
     df['date'] = pd.to_datetime(df['date'])
+    df = df.rename(columns={'spread':'Bid-ask spread bps',
+                       'winsorized_bias':'Bid-ask bias bps',
+                       'daily_return_bps':'Daily return bps',
+                       'cs_dur_bps':'Credit spread bps',
+                       })
 
     # Define the subsample date ranges
     subsamples = {
@@ -76,7 +81,7 @@ def derive_table(res_df):
         'Pre-crisis': ('2002-07-01', '2007-06-30'),
         'Crisis': ('2007-07-01', '2009-04-30'),
         'Post-Crisis': ('2009-05-01', '2012-05-31'),
-        'Basel II.5 & III': ('2012-06-01', '2014-03-31'),
+        'Basel II.5 and III': ('2012-06-01', '2014-03-31'),
         'Post-Volcker': ('2014-04-01', '2022-09-30'),
         'Up to latest': ('2002-07-01', df['date'].max())
     }
@@ -89,17 +94,17 @@ def derive_table(res_df):
         subsample_df = df[(df['date'] >= pd.to_datetime(start_date)) & (df['date'] <= pd.to_datetime(end_date))]
         # Calculate means for each category
         category_means = subsample_df.groupby('category').agg({
-            'spread': 'mean',
-            'winsorized_bias': 'mean',
-            'daily_return_bps': 'mean',
-            'cs_dur_bps': 'mean'
+            'Bid-ask bias bps': 'mean',
+            'Daily return bps': 'mean',
+            'Bid-ask spread bps': 'mean',
+            'Credit spread bps': 'mean'
         })#.add_prefix(subsample + '_')
         # Calculate the overall mean for all categories in the subsample
         overall_mean = subsample_df.agg({
-            'spread': 'mean',
-            'winsorized_bias': 'mean',
-            'daily_return_bps': 'mean',
-            'cs_dur_bps': 'mean'
+            'Bid-ask bias bps': 'mean',
+            'Daily return bps': 'mean',
+            'Bid-ask spread bps': 'mean',
+            'Credit spread bps': 'mean'
         }).to_frame('All').T#.add_prefix(subsample + '_').to_frame('All').T
         # Combine the overall mean with the category means
         combined_means = pd.concat([overall_mean, category_means], axis=0).T
@@ -122,11 +127,11 @@ def derive_table(res_df):
 
 if __name__ == "__main__":
     
-    spreadbias = pd.read_csv('..' / DATA_DIR / "pulled" /'spread_bias.csv')
-    ret = pd.read_csv('..' / DATA_DIR / "pulled" /'daily_return_cs.csv')
-    ret_cs = ret[['cusip_id', 'trd_exctn_dt','daily_return_bps', 'cs_dur_bps']]
+    spreadbias = pd.read_csv( DATA_DIR / "pulled" /'spread_bias.csv')
+    ret = pd.read_csv( DATA_DIR / "pulled" /'daily_return_cs.csv')
+    ret_cs = ret[['cusip_id', 'date','daily_return_bps', 'cs_dur_bps']]
 
-    rating = pd.read_csv('..' / DATA_DIR / "pulled" /'rating.csv')
+    rating = pd.read_csv( DATA_DIR / "pulled" /'rating.csv')
     rating = process_rating_data(rating)
 
     all_df = merge_df(spreadbias, ret_cs)
@@ -139,7 +144,7 @@ if __name__ == "__main__":
     float_format_func = lambda x: '{:.3f}'.format(x)
     latex_table_string = res_df.to_latex(float_format=float_format_func)
 
-    path = '..'/ OUTPUT_DIR / f'derived_table.tex'
+    path = OUTPUT_DIR / f'derived_table.tex'
     with open(path, "w") as text_file:
         text_file.write(latex_table_string)
 

@@ -124,7 +124,7 @@ fisd = fisd[~fisd.coupon_type.isnull()]
 fisd = fisd[~fisd.coupon.isnull()]
 
 # save fisd
-path = '.'/ Path(DATA_DIR) / "pulled" / "fisd.csv"
+path = Path(DATA_DIR) / "pulled" / "fisd.csv"
 path.parent.mkdir(parents=True, exist_ok=True)
 fisd.to_csv(path, index=False)
 
@@ -803,7 +803,7 @@ IlliqExport  = pd.concat(illiquidity_super_list, axis=0, ignore_index=False)
 
 
 # Save in compressed GZIP format # 
-PricesExport.to_csv('.'/ Path(DATA_DIR) / "pulled" / 'Prices.csv.gzip'     , compression='gzip')   
-VolumeExport.to_csv('.'/ Path(DATA_DIR) / "pulled" / 'Volumes.csv.gzip'    , compression='gzip')     
-IlliqExport.to_csv( '.'/ Path(DATA_DIR) / "pulled" / 'Illiq.csv.gzip'      , compression='gzip')    
+PricesExport.to_csv(Path(DATA_DIR) / "pulled" / 'Prices.csv.gzip'     , compression='gzip')   
+VolumeExport.to_csv(Path(DATA_DIR) / "pulled" / 'Volumes.csv.gzip'    , compression='gzip')     
+IlliqExport.to_csv( Path(DATA_DIR) / "pulled" / 'Illiq.csv.gzip'      , compression='gzip')    
 # =============================================================================  

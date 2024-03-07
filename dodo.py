@@ -88,8 +88,18 @@ def task_pull_return_cs():
     '''
     pull daily return and credit spread data from Open Bond Asset Pricing website.
     '''
-    # TO DO
-    pass
+    file_dep = ["./src/load_return_cs.py"]
+    file_output = ["BondDailyPublic.csv.gzip"]
+    targets = [DATA_DIR / "pulled" / file for file in file_output]
+
+    return {
+        "actions": [
+            "ipython ./src/load_return_cs.py",
+        ],
+        "targets": targets,
+        "file_dep": file_dep,
+        "clean": True,
+    }
 
 
 def task_calc_daily_return_cs():
