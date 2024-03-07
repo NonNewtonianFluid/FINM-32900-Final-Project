@@ -1,9 +1,9 @@
-Project Title HERE
+FINM 32900 Final Project: Replicating Tables from Noisy Prices and Return-based Anomalies in Corporate Bonds
 ==================
 
 # About this project
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+This study endeavors to replicate Table 1 from the research article "Noisy Prices and Return-based Anomalies in Corporate Bonds" authored by Alexander Dickerson, Cesare Robotti, and Giulio Rossetti. Utilizing the TRACE database, we extracted data on corporate bonds and computed various metrics, including bid-ask bias, return, bid-ask spread, and credit spread, across different time periods and bond ratings. Our findings indicate that the replication results for Table 1 closely align with the statistics reported in the original study. However, it is imperative to acknowledge several challenges encountered during our analysis, which may have contributed to slight discrepancies between our results and those presented in the original paper.
 
 # Quick Start
 
