@@ -19,7 +19,7 @@ Please make sure to update and install the required packages.
 
 Run these scripts sequentially to produce table 1 from the paper.
 
-1.  load_trace.py: This Python script is designed to streamline the process of extracting, cleaning, and analyzing bond data from the WRDS TRACE database. The script focuses on three key areas of bond market analysis: price, volume, and illiquidity metrics. By leveraging data directly from WRDS, the script ensures access to comprehensive and accurate bond trading information, enabling a detailed examination of market dynamics.
+1.  'load_trace.py': This Python script is designed to streamline the process of extracting, cleaning, and analyzing bond data from the WRDS TRACE database. The script focuses on three key areas of bond market analysis: price, volume, and illiquidity metrics. By leveraging data directly from WRDS, the script ensures access to comprehensive and accurate bond trading information, enabling a detailed examination of market dynamics.
    
 2.  load_rating.py: This Python script automates fetching bond ratings from the WRDS (Wharton Research Data Services) database, specifically targeting Moody's and Standard & Poor's (S&P) ratings. Instead of converting these ratings into numeric scores, it categorizes them into three broad quality categories: 'A and above', 'BBB', or 'Junk'. The script then cleans and saves the processed data for subsequent analysis.
 
