@@ -27,17 +27,17 @@ file_url = 'https://openbondassetpricing.com/wp-content/uploads/2023/12/BondDail
 
 response = requests.get(file_url)
 
-with open('BondDailyPublicDec2023.csv.zip', 'wb') as file:
+with open(Path(DATA_DIR) / "pulled" / 'BondDailyPublicDec2023.csv.zip', 'wb') as file:
     file.write(response.content)
 
 print('Download completed!')
 
-with zipfile.ZipFile('BondDailyPublicDec2023.csv.zip', 'r') as zip_ref:
+with zipfile.ZipFile(Path(DATA_DIR) / "pulled" / 'BondDailyPublicDec2023.csv.zip', 'r') as zip_ref:
     zip_ref.extractall(Path(DATA_DIR) / "pulled" )
 
-print('Extraction completed! The file is now under folder \data\pulled')
+print(r"Extraction completed! The file is now under folder \data\pulled")
 
-path = 'BondDailyPublicDec2023.csv.zip'
+path = Path(DATA_DIR) / "pulled" / 'BondDailyPublicDec2023.csv.zip'
 
 if os.path.exists(path):
     os.remove(path)
