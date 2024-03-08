@@ -1,7 +1,7 @@
 '''
 Overview
 -------------
-This Python script downloads the latest data from https://openbondassetpricing.com
+This Python script downloads the latest data(Dec 2023) from https://openbondassetpricing.com
 It contains daily TRACE panel data including clean and invoice (dirty) prices, 
 accrued interest, daily bond yields, bond credit spreads, duration and convexity. 
 '''
